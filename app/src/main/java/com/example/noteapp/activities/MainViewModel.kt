@@ -9,28 +9,26 @@ import androidx.lifecycle.viewModelScope
 import com.example.noteapp.dao.NoteDao
 import com.example.noteapp.database.NoteDatabase
 import com.example.noteapp.entities.Note
+import com.example.noteapp.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application): AndroidViewModel(application){
-    lateinit var dao: NoteDao
-
+    val repository: NoteRepository
+    val allNotes: LiveData<List<Note>>
 
 init {
-    dao = NoteDatabase.getDatabase(application).noteDao()
-
-
-    fun getAllNotes(): LiveData<List<Note>>{
-        return dao.getAllNotes()
-    }
+    val dao = NoteDatabase.getDatabase(application).noteDao()
+    repository = NoteRepository(dao)
+    allNotes = repository.allNotes
 }
 
     fun insertNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-        dao.insert(note)
+        repository.insert(note)
     }
 
     fun deleteNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-        dao.delete(note)
+        repository.delete(note)
     }
 
     fun validateNote(title: String, subtitle: String, note: String): Boolean {

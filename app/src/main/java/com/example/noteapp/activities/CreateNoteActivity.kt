@@ -49,7 +49,7 @@ class CreateNoteActivity : AppCompatActivity() {
             binding.textDateTime.text = dateTime
 
             if(viewModel.validateNote(title, subtitle, note)){
-                val note = Note(title,dateTime,subtitle,note, "${R.color.colorNoteColor2}")
+                val note = Note(title,dateTime,subtitle,note, R.color.colorNoteColor2)
                 viewModel.insertNote(note)
                 hideKeyboard()
                 onBackPressed()

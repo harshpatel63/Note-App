@@ -15,7 +15,7 @@ class Note(
         @ColumnInfo(name = "note_text")
         val noteText: String,
         @ColumnInfo(name = "color")
-        val color: String?
+        val color: Int
 ){
         @PrimaryKey(autoGenerate = true)
         var id = 0
