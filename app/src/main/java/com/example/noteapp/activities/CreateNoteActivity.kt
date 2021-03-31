@@ -5,19 +5,24 @@ import android.content.Context
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteapp.R
 import com.example.noteapp.databinding.ActivityCreateNoteBinding
+import com.example.noteapp.databinding.LayoutMiscBinding
 import com.example.noteapp.entities.Note
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.util.*
 
 class CreateNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateNoteBinding
+    private lateinit var bindingMisc: LayoutMiscBinding
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     lateinit var viewModel: MainViewModel
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +35,7 @@ class CreateNoteActivity : AppCompatActivity() {
             onBackPressed()
             hideKeyboard()
         }
+
 
         binding.imageSave.setOnClickListener {
             bindNote()
@@ -71,7 +77,6 @@ class CreateNoteActivity : AppCompatActivity() {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
 
 
 }

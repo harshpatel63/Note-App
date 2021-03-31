@@ -30,7 +30,7 @@ class NoteAdapter(private  val context: Context): RecyclerView.Adapter<NoteAdapt
         holder.itemTitle.text = currentNote.title
         holder.itemSubtitle.text = currentNote.subtitle
         holder.itemNote.text = currentNote.noteText
-        holder.itemView.setBackgroundColor(currentNote.color)
+        holder.itemView.setBackgroundResource(R.drawable.background_note_color_1)
     }
     fun updateList(newList: List<Note>){
         allNotes.clear()
