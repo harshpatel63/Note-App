@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.adapter.NoteAdapter
 import com.example.noteapp.databinding.ActivityMainBinding
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        binding.notesRecyclerView.layoutManager = GridLayoutManager(this,2)
+        binding.notesRecyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         val adapter = NoteAdapter(this)
         binding.notesRecyclerView.adapter = adapter
 
