@@ -37,18 +37,23 @@ class CreateNoteActivity : AppCompatActivity() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutMisc)
         binding.apply {
             viewColor1.setOnClickListener{
+                changeTick(viewColor1)
                 selectedColor = R.color.colorDefaultNoteColor
             }
             viewColor2.setOnClickListener{
+                changeTick(viewColor2)
                 selectedColor = R.color.colorNoteColor2
             }
             viewColor3.setOnClickListener{
+                changeTick(viewColor3)
                 selectedColor = R.color.colorNoteColor3
             }
             viewColor4.setOnClickListener{
+                changeTick(viewColor4)
                 selectedColor = R.color.colorNoteColor4
             }
             viewColor5.setOnClickListener{
+                changeTick(viewColor5)
                 selectedColor = R.color.colorNoteColor5
             }
         }
@@ -59,6 +64,26 @@ class CreateNoteActivity : AppCompatActivity() {
         }
 
         setContentView(binding.root)
+
+    }
+
+    private fun changeTick(view: View) {
+        binding.apply {
+            when(selectedColor){
+                R.color.colorDefaultNoteColor -> imageColor1.setImageResource(0)
+                R.color.colorNoteColor2 -> imageColor2.setImageResource(0)
+                R.color.colorNoteColor3 -> imageColor3.setImageResource(0)
+                R.color.colorNoteColor4 -> imageColor4.setImageResource(0)
+                R.color.colorNoteColor5 -> imageColor5.setImageResource(0)
+            }
+            when(view){
+                viewColor1 -> imageColor1.setImageResource(R.drawable.ic_done)
+                viewColor2 -> imageColor2.setImageResource(R.drawable.ic_done)
+                viewColor3 -> imageColor3.setImageResource(R.drawable.ic_done)
+                viewColor4 -> imageColor4.setImageResource(R.drawable.ic_done)
+                viewColor5 -> imageColor5.setImageResource(R.drawable.ic_done)
+            }
+        }
 
     }
 
