@@ -1,8 +1,11 @@
 package com.example.noteapp.entities
 
+import android.graphics.Bitmap
+import android.hardware.biometrics.BiometricManager
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.net.URL
 
 @Entity(tableName = "notes_table")
 class Note(
@@ -20,8 +23,8 @@ class Note(
         @PrimaryKey(autoGenerate = true)
         var id = 0
 
-        @ColumnInfo(name = "image_path")
-        var imagePath: String = ""
+        @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+        var imagePath: ByteArray? = null
 
         @ColumnInfo(name = "web_link")
         var webLink: String = ""

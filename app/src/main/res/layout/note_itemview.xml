@@ -1,50 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginTop="@dimen/_12sdp"
-    app:cardCornerRadius="@dimen/_7sdp">
+    app:cardCornerRadius="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutNote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp">
+        android:paddingBottom="@dimen/_8sdp"
+        android:layout_height="wrap_content">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/itemImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:riv_corner_radius_top_left="@dimen/_10sdp"
+            app:riv_corner_radius_top_right="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/_20ssp"
-            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"
+            android:includeFontPadding="false"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:fontFamily="@font/ubuntu_bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
+            app:layout_constraintTop_toBottomOf="@id/itemImage"/>
 
         <TextView
             android:id="@+id/itemSubtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
+            android:textColor="@color/colorNoteSubtitleText"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:textSize="@dimen/_12ssp"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/ubuntu_bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemTitle"
-            tools:text="Subtitle" />
+            app:layout_constraintTop_toBottomOf="@id/itemTitle"/>
+
 
         <TextView
-            android:id="@+id/itemNote"
-            android:layout_width="wrap_content"
+            android:id="@+id/itemDateTime"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textStyle="normal"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:fontFamily="@font/ubuntu"
+            android:includeFontPadding="false"
+            android:textSize="@dimen/_7ssp"
+            android:textColor="@color/colorNoteSubtitleText"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemSubtitle"
-            tools:text="This is a Note" />
+            app:layout_constraintTop_toBottomOf="@id/itemSubtitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
