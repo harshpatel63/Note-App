@@ -1,14 +1,12 @@
-package com.example.noteapp.activities
+package com.example.noteapp.ui
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -25,7 +23,7 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
-class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, IGetUrl {
 
     private val REQUEST_CODE_STORAGE_PERMISSION = 12345
     private val REQUEST_CODE_IMAGE_PICK = 1245
@@ -35,6 +33,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     lateinit var viewModel: MainViewModel
     private var selectedColor = R.color.colorDefaultNoteColor
      private var imageBitmap: Bitmap? = null
+    private var webUrl: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +41,8 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
         binding = ActivityCreateNoteBinding.inflate(layoutInflater)
 
         viewModel = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
+
+        Log.i("chcek","oncreate called")
 
         binding.imageBack.setOnClickListener {
             onBackPressed()
@@ -99,7 +100,23 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             bindNote()
         }
 
+        binding.layoutAddUrl.setOnClickListener {
+            showAddurlDialog()
+        }
+
         setContentView(binding.root)
+
+    }
+
+    private fun showAddurlDialog() {
+        val dialogFragment = AddUrlDialogFragment(this)
+        dialogFragment.show(supportFragmentManager, "getThisDone")
+    }
+
+    override fun sendUrl(url: String) {
+        webUrl = url
+        binding.textWebURL.text = url
+        binding.layoutWebURL.visibility = View.VISIBLE
 
     }
 
@@ -181,9 +198,14 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
             if(viewModel.validateNote(title, subtitle, noteText)){
                 val note = Note(title, dateTime, subtitle, noteText, selectedColor)
+
                 imageBitmap?.let {
                     val converters = Converters()
                     note.imagePath = converters.fromBitmap(imageBitmap!!)
+
+                    webUrl?.let {
+                        note.webLink = webUrl as String
+                    }
                 }
 
                 viewModel.insertNote(note)
@@ -204,9 +226,8 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     }
 
     private fun Context.hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
 
 }

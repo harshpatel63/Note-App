@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_500"
-    tools:context=".activities.CreateNoteActivity">
+    tools:context=".ui.CreateNoteActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -113,6 +113,28 @@
                 android:contentDescription="@string/app_name"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubtitle"
                 android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/layoutWebURL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_12ssp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/imageNote">
+
+                <TextView
+                    android:id="@+id/textWebURL"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:autoLink="web"
+                    android:fontFamily="@font/ubuntu"
+                    android:includeFontPadding="false"
+                    android:textSize="@dimen/_13ssp"/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/inputNote"
@@ -134,7 +156,7 @@
                 android:textColorHint="@color/colorHintText"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageNote"/>
+                app:layout_constraintTop_toBottomOf="@id/layoutWebURL"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -299,6 +321,32 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:includeFontPadding="false"
                 android:text="@string/add_image"
+                android:textColor="@color/colorIcons"
+                android:textSize="@dimen/_12ssp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutAddUrl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_language"
+                app:tint="@color/colorIcons" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/add_url"
                 android:textColor="@color/colorIcons"
                 android:textSize="@dimen/_12ssp"/>
         </LinearLayout>

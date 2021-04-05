@@ -1,12 +1,10 @@
-package com.example.noteapp.activities
+package com.example.noteapp.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteapp.adapter.NoteAdapter
 import com.example.noteapp.databinding.ActivityMainBinding

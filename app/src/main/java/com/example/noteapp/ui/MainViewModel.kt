@@ -1,12 +1,9 @@
-package com.example.noteapp.activities
+package com.example.noteapp.ui
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.noteapp.dao.NoteDao
 import com.example.noteapp.database.NoteDatabase
 import com.example.noteapp.entities.Note
 import com.example.noteapp.repository.NoteRepository
