@@ -24,7 +24,7 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
-class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, IGetUrl {
+class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, IGetUrl, IDelete {
 
     private val REQUEST_CODE_STORAGE_PERMISSION = 12345
     private val REQUEST_CODE_IMAGE_PICK = 1245
@@ -36,6 +36,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     private var imageBitmap: Bitmap? = null
     private var webUrl: String = ""
     private var isNew = true
+    lateinit var note: Note
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,9 +133,18 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
                 textAddImage.text = getString(R.string.add_image)
             }
 
+            layoutDeleteNote.setOnClickListener {
+                openDeleteDialog()
+            }
+
             setContentView(root)
         }
 
+    }
+
+    private fun openDeleteDialog() {
+        val deleteDialogFragment = DeleteNoteDialogFragment(this)
+        deleteDialogFragment.show(supportFragmentManager, "deleteNote")
     }
 
     private fun editNoteFunction() {
@@ -143,6 +153,21 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             inputNoteSubtitle.setText(intent.getStringExtra("editSubtitle").toString())
             inputNote.setText(intent.getStringExtra("editText").toString())
             selectedColor = intent.getIntExtra("editColor", R.color.colorDefaultNoteColor)
+
+            val title = inputNoteTitle.text.toString()
+            val subtitle = inputNoteSubtitle.text.toString()
+
+
+            if (viewModel.validateNote(title, subtitle)) {
+                val noteText = inputNote.text.toString()
+                val dateTime = SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
+                        .format(Date())
+                binding.textDateTime.text = dateTime
+                note = Note(title, dateTime, subtitle, noteText, selectedColor)
+                note.id = intent.getIntExtra("editId",0)
+            }
+
+            layoutDeleteNote.visibility = View.VISIBLE
 
             val converters = Converters()
             val bArray = intent.getByteArrayExtra("editImage")
@@ -262,7 +287,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
                 val dateTime = SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
                         .format(Date())
                 binding.textDateTime.text = dateTime
-                val note = Note(title, dateTime, subtitle, noteText, selectedColor)
+                note = Note(title, dateTime, subtitle, noteText, selectedColor)
 
                 if (!isNew) {
                     val id = intent.getIntExtra("editId", 0)
@@ -297,6 +322,11 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun deleteNoteFun() {
+        viewModel.deleteNote(note)
+        onBackPressed()
     }
 
 }
