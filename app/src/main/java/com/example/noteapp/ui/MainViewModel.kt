@@ -28,11 +28,11 @@ init {
         repository.delete(note)
     }
 
-    fun validateNote(title: String, subtitle: String, note: String): Boolean {
+    fun validateNote(title: String, subtitle: String): Boolean {
         if(title.isEmpty()){
             return false
         }
-        if(note.isEmpty()){
+        if(subtitle.isEmpty()){
             return false
         }
         return true

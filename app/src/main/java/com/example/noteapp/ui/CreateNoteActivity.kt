@@ -19,6 +19,7 @@ import com.example.noteapp.R
 import com.example.noteapp.databinding.ActivityCreateNoteBinding
 import com.example.noteapp.entities.Note
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
@@ -32,8 +33,9 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     lateinit var viewModel: MainViewModel
     private var selectedColor = R.color.colorDefaultNoteColor
-     private var imageBitmap: Bitmap? = null
-    private var webUrl: String? = null
+    private var imageBitmap: Bitmap? = null
+    private var webUrl: String = ""
+    private var isNew = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,73 +44,113 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
         viewModel = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
 
-        Log.i("chcek","oncreate called")
+        if (!intent.getBooleanExtra("isNew", true)) {
+            isNew = false
+            editNoteFunction()
+        }
+
+        when(intent.getStringExtra("goto")){
+            "goToImage" -> createGalleryIntent()
+            "goToLink" -> showAddUrlDialog()
+        }
 
         binding.imageBack.setOnClickListener {
             onBackPressed()
             hideKeyboard()
         }
 
+
         bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutMisc)
 
         binding.apply {
-            viewColor1.setOnClickListener{
+            viewColor1.setOnClickListener {
                 changeTick(viewColor1)
                 selectedColor = R.color.colorDefaultNoteColor
                 viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
             }
-            viewColor2.setOnClickListener{
+            viewColor2.setOnClickListener {
                 changeTick(viewColor2)
                 selectedColor = R.color.colorNoteColor2
                 viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
             }
-            viewColor3.setOnClickListener{
+            viewColor3.setOnClickListener {
                 changeTick(viewColor3)
                 selectedColor = R.color.colorNoteColor3
                 viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
             }
-            viewColor4.setOnClickListener{
+            viewColor4.setOnClickListener {
                 changeTick(viewColor4)
                 selectedColor = R.color.colorNoteColor4
                 viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
             }
-            viewColor5.setOnClickListener{
+            viewColor5.setOnClickListener {
                 changeTick(viewColor5)
                 selectedColor = R.color.colorNoteColor5
                 viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
             }
-        }
-        binding.textMisc.setOnClickListener {
-        when(bottomSheetBehavior.state){
-            BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            BottomSheetBehavior.STATE_EXPANDED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-        }
 
-        binding.layoutAddImage.setOnClickListener {
+            textMisc.setOnClickListener {
+                when (bottomSheetBehavior.state) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    BottomSheetBehavior.STATE_EXPANDED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+            }
+
+            layoutAddImage.setOnClickListener {
                 checkForStoragePermission()
                 createGalleryIntent()
+            }
+
+
+            imageNote.setOnClickListener {
+                binding.imageNote.setImageResource(0)
+                createGalleryIntent()
+            }
+
+
+            imageSave.setOnClickListener {
+                bindNote()
+            }
+
+
+            layoutAddUrl.setOnClickListener {
+                showAddUrlDialog()
+            }
+
+            setContentView(root)
         }
-
-        binding.imageNote.setOnClickListener {
-            binding.imageNote.setImageResource(0)
-            createGalleryIntent()
-        }
-
-
-        binding.imageSave.setOnClickListener {
-            bindNote()
-        }
-
-        binding.layoutAddUrl.setOnClickListener {
-            showAddurlDialog()
-        }
-
-        setContentView(binding.root)
 
     }
 
-    private fun showAddurlDialog() {
+    private fun editNoteFunction() {
+        binding.apply {
+            inputNoteTitle.setText(intent.getStringExtra("editTitle").toString())
+            inputNoteSubtitle.setText(intent.getStringExtra("editSubtitle").toString())
+            inputNote.setText(intent.getStringExtra("editText").toString())
+            selectedColor = intent.getIntExtra("editColor", R.color.colorDefaultNoteColor)
+
+            val converters = Converters()
+            val bArray = intent.getByteArrayExtra("editImage")
+            bArray?.let {
+                textAddImage.text = getString(R.string.change_image)
+            val bitmap = converters.toBitmap(bArray)
+                imageNote.setImageBitmap(bitmap)
+                imageBitmap = bitmap
+                imageNote.visibility = View.VISIBLE
+            }
+
+            val url: String = intent.getStringExtra("editWebLink").toString()
+            if(url != ""){
+                textAddLink.text = getString(R.string.edit_link)
+                webUrl = url
+                textWebURL.text = url
+                layoutWebURL.visibility = View.VISIBLE
+            }
+
+        }
+    }
+
+    private fun showAddUrlDialog() {
         val dialogFragment = AddUrlDialogFragment(this)
         dialogFragment.show(supportFragmentManager, "getThisDone")
     }
@@ -122,14 +164,14 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     private fun createGalleryIntent() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
-        galleryIntent.setType("image/*")
+        galleryIntent.type = "image/*"
         startActivityForResult(galleryIntent, REQUEST_CODE_IMAGE_PICK)
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == RESULT_OK && data!=null){
+        if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             binding.imageNote.setImageURI(data.data)
             binding.imageNote.visibility = View.VISIBLE
             imageBitmap = (binding.imageNote.drawable as BitmapDrawable).bitmap
@@ -138,7 +180,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     }
 
     private fun checkForStoragePermission() {
-        if(EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             return
         } else {
             EasyPermissions.requestPermissions(
@@ -159,7 +201,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
         } else {
             checkForStoragePermission()
@@ -169,14 +211,14 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     private fun changeTick(view: View) {
         binding.apply {
-            when(selectedColor){
+            when (selectedColor) {
                 R.color.colorDefaultNoteColor -> imageColor1.setImageResource(0)
                 R.color.colorNoteColor2 -> imageColor2.setImageResource(0)
                 R.color.colorNoteColor3 -> imageColor3.setImageResource(0)
                 R.color.colorNoteColor4 -> imageColor4.setImageResource(0)
                 R.color.colorNoteColor5 -> imageColor5.setImageResource(0)
             }
-            when(view){
+            when (view) {
                 viewColor1 -> imageColor1.setImageResource(R.drawable.ic_done)
                 viewColor2 -> imageColor2.setImageResource(R.drawable.ic_done)
                 viewColor3 -> imageColor3.setImageResource(R.drawable.ic_done)
@@ -187,34 +229,40 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     }
 
-    private fun bindNote(){
+    private fun bindNote() {
         binding.apply {
+
             val title = inputNoteTitle.text.toString()
             val subtitle = inputNoteSubtitle.text.toString()
-            val noteText = inputNote.text.toString()
-            val dateTime = SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
-                    .format(Date())
-            binding.textDateTime.text = dateTime
 
-            if(viewModel.validateNote(title, subtitle, noteText)){
+
+            if (viewModel.validateNote(title, subtitle)) {
+                val noteText = inputNote.text.toString()
+                val dateTime = SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
+                        .format(Date())
+                binding.textDateTime.text = dateTime
                 val note = Note(title, dateTime, subtitle, noteText, selectedColor)
+
+                if (!isNew) {
+                    val id = intent.getIntExtra("editId", 0)
+                    note.id = id
+                }
 
                 imageBitmap?.let {
                     val converters = Converters()
                     note.imagePath = converters.fromBitmap(imageBitmap!!)
 
-                    webUrl?.let {
-                        note.webLink = webUrl as String
-                    }
+                    Log.i("uhf", webUrl)
+                }
+                if(webUrl != ""){
+                    note.webLink = webUrl
                 }
 
                 viewModel.insertNote(note)
                 hideKeyboard()
                 onBackPressed()
-            }
-            else
-            {
-                // Implement for empty title and subtitle
+            } else {
+                Snackbar.make(inputNoteTitle, "Title or Subtitle cannot be empty", Snackbar.LENGTH_SHORT).show()
             }
 
         }

@@ -12,4 +12,6 @@
     <string name="enter_url">Enter URL</string>
     <string name="add">ADD</string>
     <string name="cancel">CANCEL</string>
+    <string name="edit_link">Edit Link</string>
+    <string name="change_image">Change Image</string>
 </resources>

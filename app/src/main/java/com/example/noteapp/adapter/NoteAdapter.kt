@@ -16,7 +16,7 @@ import com.example.noteapp.R
 import com.example.noteapp.entities.Note
 import com.makeramen.roundedimageview.RoundedImageView
 
-class NoteAdapter(private  val context: Context): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter(private  val context: Context, private val listener: INoteRVAdapter): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     val allNotes = ArrayList<Note>()
 
     inner class NoteViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -28,7 +28,11 @@ class NoteAdapter(private  val context: Context): RecyclerView.Adapter<NoteAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val viewHolder = NoteViewHolder(LayoutInflater.from(context).inflate(R.layout.note_itemview,parent,false))
+        val view = LayoutInflater.from(context).inflate(R.layout.note_itemview,parent,false)
+        val viewHolder = NoteViewHolder(view)
+        view.setOnClickListener {
+            listener.onNoteClicked(allNotes[viewHolder.adapterPosition])
+        }
         return viewHolder
     }
 
@@ -54,4 +58,8 @@ class NoteAdapter(private  val context: Context): RecyclerView.Adapter<NoteAdapt
         notifyDataSetChanged()
     }
 
+}
+
+interface INoteRVAdapter{
+    fun onNoteClicked(note: Note)
 }

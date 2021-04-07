@@ -315,6 +315,7 @@
                 android:src="@drawable/ic_image"
                 app:tint="@color/colorIcons" />
             <TextView
+                android:id="@+id/textAddImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -341,6 +342,7 @@
                 android:src="@drawable/ic_language"
                 app:tint="@color/colorIcons" />
             <TextView
+                android:id="@+id/textAddLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
