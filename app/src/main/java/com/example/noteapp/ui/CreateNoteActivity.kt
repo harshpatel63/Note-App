@@ -117,6 +117,21 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
                 showAddUrlDialog()
             }
 
+            imageRemoveWebUrl.setOnClickListener {
+                webUrl = ""
+                textWebURL.text = ""
+                layoutWebURL.visibility = View.GONE
+                textAddLink.text = getString(R.string.add_url)
+            }
+
+            imageRemoveImage.setOnClickListener {
+                imageBitmap = null
+                imageNote.setImageResource(0)
+                imageNote.visibility = View.GONE
+                imageRemoveImage.visibility = View.GONE
+                textAddImage.text = getString(R.string.add_image)
+            }
+
             setContentView(root)
         }
 
@@ -158,7 +173,11 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
     override fun sendUrl(url: String) {
         webUrl = url
         binding.textWebURL.text = url
+        binding.textAddLink.text = getString(R.string.edit_link)
         binding.layoutWebURL.visibility = View.VISIBLE
+        binding.imageRemoveWebUrl.visibility = View.VISIBLE
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        hideKeyboard()
 
     }
 
@@ -174,6 +193,8 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
         if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
             binding.imageNote.setImageURI(data.data)
             binding.imageNote.visibility = View.VISIBLE
+            binding.imageRemoveImage.visibility = View.VISIBLE
+            binding.textAddImage.text = getString(R.string.change_image)
             imageBitmap = (binding.imageNote.drawable as BitmapDrawable).bitmap
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
