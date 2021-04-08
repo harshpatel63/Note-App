@@ -6,7 +6,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.noteapp"
@@ -79,7 +79,7 @@ dependencies {
     implementation "com.google.android.material:material:$rootProject.materialVersion"
 
     //Easy Permissions
-    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation "pub.devrel:easypermissions:$rootProject.easyPermissions"
 
 
 

@@ -13,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteapp.Converters
 import com.example.noteapp.R
@@ -20,7 +21,6 @@ import com.example.noteapp.databinding.ActivityCreateNoteBinding
 import com.example.noteapp.databinding.ActivityCreateNoteBinding.*
 import com.example.noteapp.entities.Note
 import com.example.noteapp.viewmodels.CreateNoteViewModel
-import com.example.noteapp.viewmodels.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -29,14 +29,22 @@ import java.util.*
 
 class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, IGetUrl, IDelete {
 
-    private val REQUEST_CODE_STORAGE_PERMISSION = 12345
-    private val REQUEST_CODE_IMAGE_PICK = 1245
+
+    companion object {
+        private const val REQUEST_CODE_STORAGE_PERMISSION = 12345
+        private const val REQUEST_CODE_IMAGE_PICK = 1245
+        const val color1 = R.color.colorDefaultNoteColor
+        const val color2 = R.color.colorNoteColor2
+        const val color3 = R.color.colorNoteColor3
+        const val color4 = R.color.colorNoteColor4
+        const val color5 = R.color.colorNoteColor5
+    }
 
     private lateinit var binding: ActivityCreateNoteBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var viewModel: CreateNoteViewModel
-    private var selectedColor = R.color.colorDefaultNoteColor
     private var imageBitmap: Bitmap? = null
+    private var selectedColor = R.color.colorDefaultNoteColor
     private var webUrl: String = ""
     private var isNew = true
     lateinit var note: Note
@@ -48,6 +56,8 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application)).get(CreateNoteViewModel::class.java)
 
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutMisc)
+
         if (!intent.getBooleanExtra("isNew", true)) {
             isNew = false
             editNoteFunction()
@@ -58,39 +68,44 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             "goToLink" -> showAddUrlDialog()
         }
 
-        binding.imageBack.setOnClickListener {
-            onBackPressed()
-            hideKeyboard()
-        }
+        viewModel.selectedColor.observe(this, Observer {
 
+            binding.viewSubtitleIndicator.setBackgroundColor(getColor(it))
+            when(it){
+                color1 -> changeTick(binding.viewColor1)
+                color2 -> changeTick(binding.viewColor2)
+                color3 -> changeTick(binding.viewColor3)
+                color4 -> changeTick(binding.viewColor4)
+                color5 -> changeTick(binding.viewColor5)
+            }
+            })
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.layoutMisc)
 
         binding.apply {
+
+            imageBack.setOnClickListener {
+            onBackPressed()
+            hideKeyboard()
+                }
+
             viewColor1.setOnClickListener {
-                changeTick(viewColor1)
-                selectedColor = R.color.colorDefaultNoteColor
-                viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
+                viewModel.changeColor(color1)
+
             }
             viewColor2.setOnClickListener {
-                changeTick(viewColor2)
-                selectedColor = R.color.colorNoteColor2
-                viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
+                viewModel.changeColor(color2)
+
             }
             viewColor3.setOnClickListener {
-                changeTick(viewColor3)
-                selectedColor = R.color.colorNoteColor3
-                viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
+                viewModel.changeColor(color3)
+
             }
             viewColor4.setOnClickListener {
-                changeTick(viewColor4)
-                selectedColor = R.color.colorNoteColor4
-                viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
+                viewModel.changeColor(color4)
+
             }
             viewColor5.setOnClickListener {
-                changeTick(viewColor5)
-                selectedColor = R.color.colorNoteColor5
-                viewSubtitleIndicator.setBackgroundColor(resources.getColor(selectedColor))
+                viewModel.changeColor(color5)
             }
 
             textMisc.setOnClickListener {
@@ -101,7 +116,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             }
 
             layoutAddImage.setOnClickListener {
-                checkForStoragePermission()
+
                 createGalleryIntent()
             }
 
@@ -262,13 +277,11 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     private fun changeTick(view: View) {
         binding.apply {
-            when (selectedColor) {
-                R.color.colorDefaultNoteColor -> imageColor1.setImageResource(0)
-                R.color.colorNoteColor2 -> imageColor2.setImageResource(0)
-                R.color.colorNoteColor3 -> imageColor3.setImageResource(0)
-                R.color.colorNoteColor4 -> imageColor4.setImageResource(0)
-                R.color.colorNoteColor5 -> imageColor5.setImageResource(0)
-            }
+            imageColor1.setImageResource(0)
+            imageColor2.setImageResource(0)
+            imageColor3.setImageResource(0)
+            imageColor4.setImageResource(0)
+            imageColor5.setImageResource(0)
             when (view) {
                 viewColor1 -> imageColor1.setImageResource(R.drawable.ic_done)
                 viewColor2 -> imageColor2.setImageResource(R.drawable.ic_done)
