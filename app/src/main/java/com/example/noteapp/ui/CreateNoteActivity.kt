@@ -17,7 +17,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.noteapp.Converters
 import com.example.noteapp.R
 import com.example.noteapp.databinding.ActivityCreateNoteBinding
+import com.example.noteapp.databinding.ActivityCreateNoteBinding.*
 import com.example.noteapp.entities.Note
+import com.example.noteapp.viewmodels.CreateNoteViewModel
+import com.example.noteapp.viewmodels.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -31,7 +34,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     private lateinit var binding: ActivityCreateNoteBinding
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: CreateNoteViewModel
     private var selectedColor = R.color.colorDefaultNoteColor
     private var imageBitmap: Bitmap? = null
     private var webUrl: String = ""
@@ -41,9 +44,9 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCreateNoteBinding.inflate(layoutInflater)
+        binding = inflate(layoutInflater)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(application)).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application)).get(CreateNoteViewModel::class.java)
 
         if (!intent.getBooleanExtra("isNew", true)) {
             isNew = false
@@ -154,6 +157,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             inputNote.setText(intent.getStringExtra("editText").toString())
             selectedColor = intent.getIntExtra("editColor", R.color.colorDefaultNoteColor)
 
+
             val title = inputNoteTitle.text.toString()
             val subtitle = inputNoteSubtitle.text.toString()
 
@@ -172,6 +176,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             val converters = Converters()
             val bArray = intent.getByteArrayExtra("editImage")
             bArray?.let {
+                imageRemoveImage.visibility = View.VISIBLE
                 textAddImage.text = getString(R.string.change_image)
             val bitmap = converters.toBitmap(bArray)
                 imageNote.setImageBitmap(bitmap)

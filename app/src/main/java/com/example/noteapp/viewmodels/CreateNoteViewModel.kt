@@ -1,4 +1,4 @@
-package com.example.noteapp.ui
+package com.example.noteapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -10,15 +10,16 @@ import com.example.noteapp.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application): AndroidViewModel(application){
-    val repository: NoteRepository
+class CreateNoteViewModel(application: Application): AndroidViewModel(application) {
+
+    private val repository: NoteRepository
     val allNotes: LiveData<List<Note>>
 
-init {
-    val dao = NoteDatabase.getDatabase(application).noteDao()
-    repository = NoteRepository(dao)
-    allNotes = repository.allNotes
-}
+    init {
+        val dao = NoteDatabase.getDatabase(application).noteDao()
+        repository = NoteRepository(dao)
+        allNotes = repository.allNotes
+    }
 
     fun insertNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(note)
@@ -37,6 +38,7 @@ init {
         }
         return true
     }
+
 
 
 }

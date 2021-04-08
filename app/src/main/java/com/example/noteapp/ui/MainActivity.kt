@@ -10,11 +10,12 @@ import com.example.noteapp.adapter.INoteRVAdapter
 import com.example.noteapp.adapter.NoteAdapter
 import com.example.noteapp.databinding.ActivityMainBinding
 import com.example.noteapp.entities.Note
+import com.example.noteapp.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity(), INoteRVAdapter {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,35 +26,38 @@ class MainActivity : AppCompatActivity(), INoteRVAdapter {
         val adapter = NoteAdapter(this, this)
         binding.notesRecyclerView.adapter = adapter
 
-        val viewModelFactory = MainViewModelFactory(application)
 
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application)).get(MainViewModel::class.java)
 
 
-        binding.imageAddNoteMain.setOnClickListener {
-            createNoteActivityIntent("")
-        }
+        binding.apply {
 
-        binding.imageAddNote.setOnClickListener {
-            createNoteActivityIntent("")
-        }
-
-        binding.imageAddImage.setOnClickListener {
-            createNoteActivityIntent("goToImage")
-        }
-
-        binding.imageAddWebLink.setOnClickListener {
-            createNoteActivityIntent("goToLink")
-        }
-
-        viewModel.allNotes.observe(this, Observer {list ->
-            list?.let {
-                adapter.updateList(list)
+            imageAddNoteMain.setOnClickListener {
+                createNoteActivityIntent("")
             }
 
-        })
+            imageAddNote.setOnClickListener {
+                createNoteActivityIntent("")
+            }
 
-        setContentView(binding.root)
+            imageAddImage.setOnClickListener {
+                createNoteActivityIntent("goToImage")
+            }
+
+            imageAddWebLink.setOnClickListener {
+                createNoteActivityIntent("goToLink")
+            }
+        }
+
+            viewModel.allNotes.observe(this, Observer { list ->
+                list?.let {
+                    adapter.updateList(list)
+                }
+
+            })
+
+            setContentView(binding.root)
+
     }
 
     private fun createNoteActivityIntent(goto: String){
