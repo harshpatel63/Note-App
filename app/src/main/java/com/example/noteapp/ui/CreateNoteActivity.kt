@@ -69,6 +69,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
         }
 
         viewModel.selectedColor.observe(this, Observer {
+            selectedColor = it
 
             binding.viewSubtitleIndicator.setBackgroundColor(getColor(it))
             when(it){
