@@ -17,7 +17,7 @@ import com.example.noteapp.entities.Note
 import com.makeramen.roundedimageview.RoundedImageView
 
 class NoteAdapter(private  val context: Context, private val listener: INoteRVAdapter): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
-    val allNotes = ArrayList<Note>()
+    private val allNotes = ArrayList<Note>()
 
     inner class NoteViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val itemTitle = itemView.findViewById<TextView>(R.id.itemTitle)
