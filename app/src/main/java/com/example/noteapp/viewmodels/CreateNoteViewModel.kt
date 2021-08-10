@@ -46,7 +46,6 @@ class CreateNoteViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     fun changeColor(color: Int){
-        Log.i("sjldfh", color.toString())
         _selectedColor.value = color
     }
 

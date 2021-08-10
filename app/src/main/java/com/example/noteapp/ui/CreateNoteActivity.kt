@@ -71,7 +71,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
         viewModel.selectedColor.observe(this, Observer {
             selectedColor = it
 
-            binding.viewSubtitleIndicator.setBackgroundColor(getColor(it))
+            binding.viewSubtitleIndicator.setCardBackgroundColor(getColor(it))
             when(it){
                 color1 -> changeTick(binding.viewColor1)
                 color2 -> changeTick(binding.viewColor2)
@@ -171,7 +171,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
             inputNoteTitle.setText(intent.getStringExtra("editTitle").toString())
             inputNoteSubtitle.setText(intent.getStringExtra("editSubtitle").toString())
             inputNote.setText(intent.getStringExtra("editText").toString())
-            selectedColor = intent.getIntExtra("editColor", R.color.colorDefaultNoteColor)
+            viewModel.changeColor(intent.getIntExtra("editColor", R.color.colorDefaultNoteColor))
 
 
             val title = inputNoteTitle.text.toString()
