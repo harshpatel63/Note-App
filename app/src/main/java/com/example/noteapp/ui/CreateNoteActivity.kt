@@ -325,13 +325,19 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
                 viewModel.insertNote(note)
                 hideKeyboard()
-                onBackPressed()
+                mainActivityIntent()
             } else {
                 Snackbar.make(inputNoteTitle, "Title or Subtitle cannot be empty", Snackbar.LENGTH_SHORT).show()
             }
 
         }
 
+    }
+
+    private fun mainActivityIntent()
+    {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun Activity.hideKeyboard() {
@@ -345,7 +351,7 @@ class CreateNoteActivity : AppCompatActivity(), EasyPermissions.PermissionCallba
 
     override fun deleteNoteFun() {
         viewModel.deleteNote(note)
-        onBackPressed()
+        mainActivityIntent()
     }
 
 }

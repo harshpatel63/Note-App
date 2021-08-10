@@ -25,9 +25,10 @@ class MainActivity : AppCompatActivity(), INoteRVAdapter {
         binding.notesRecyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         val adapter = NoteAdapter(this, this)
         binding.notesRecyclerView.adapter = adapter
-
-
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(application)).get(MainViewModel::class.java)
+
+
+        viewModel.allNotes.value?.let { adapter.updateList(it) }
 
 
         binding.apply {
