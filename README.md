@@ -1,5 +1,5 @@
 # Note-App
-An ultimate note app to note down text, images and web links. The cool part is that it is in DARK MODE 😎
+An ultimate note app to note down text, images and web links. The cool part => only available in DARK MODE 😎
 
 
 ## Technologies Used
