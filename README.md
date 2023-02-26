@@ -6,6 +6,7 @@ An ultimate note app to note down text, images and web links. The cool part => o
 * MVVM Architecture
 * Room Database with Coroutines
 * Bottom Sheet Navigation
+* Added Github Workflow and Firebase App Distribution
 
 ## Snapshots of the app
 <p>
