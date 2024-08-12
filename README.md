@@ -17,7 +17,7 @@ An ultimate note app to note down text, images and web links. The cool part => o
 
 
 # Issues
-Feel free to create new issues or improvement for the app in the [issues](https://github.com/Sci3fic/Note-App/issues) section.
+Feel free to create new issues or improvement for the app in the [issues](https://github.com/harshpatel63/Note-App/issues) section.
 
 # Contributing
 1. Cone the repository.
